@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "service"
+version = "0.1.0"
+description = "Infra-first skeleton: FastAPI + pytest + Docker + CI"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.30.0",
+  "pydantic>=2.7.0",
+  "pytest>=8.0.0",
+  "httpx>=0.27.0"
+]
+
+[tool.pytest.ini_options]
+addopts = "-q --disable-warnings --maxfail=1"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
