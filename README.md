@@ -17,7 +17,7 @@ A lightweight sentiment analysis web service powered by FastAPI and HuggingFace 
 - **`tests/test_api.py`**: Comprehensive tests for sentiment analysis
 - **`pyproject.toml`**: Build tool + dependencies (FastAPI, transformers, torch)
 - **`Dockerfile`**: Production-ready container (Python 3.11, uvicorn)
-- **`.github/workflows/ci.yml`**: CI pipeline on every push
+- **`.github/workflows/ci.yml`**: CI pipeline with linting, testing, and Docker build
 
 ---
 
@@ -68,4 +68,33 @@ curl -X POST http://localhost:8000/api/sentiment \
 ```bash
 docker build -t sentiment-service .
 docker run -p 8000:8000 sentiment-service
+```
+
+---
+
+## CI/CD Pipeline
+
+The CI pipeline runs on every push and pull request:
+
+1. **Lint & Format**: Code quality checks with Ruff, Black, and isort
+2. **Tests**: pytest with coverage on Python 3.11 & 3.12
+3. **Docker Build**: Builds and tests the Docker container
+
+### Development
+
+```bash
+# Install with dev dependencies for linting
+pip install -e ".[dev]"
+
+# Format code
+black app/ tests/
+isort app/ tests/
+
+# Check linting
+ruff check app/ tests/
+black --check app/ tests/
+isort --check-only app/ tests/
+
+# Run tests with coverage
+pytest --cov=app --cov-report=html -v
 ```
