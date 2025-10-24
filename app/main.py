@@ -1,9 +1,10 @@
+from pathlib import Path
+
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
-from pathlib import Path
 
 app = FastAPI(title="Text Analysis Service", version="0.1.0")
 
