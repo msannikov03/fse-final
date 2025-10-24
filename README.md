@@ -1,31 +1,71 @@
-# Project Service (Skeleton)
+# Sentiment Analysis Service
 
-Inital skeleton. It includes:
+A lightweight sentiment analysis web service powered by FastAPI and HuggingFace Transformers.
 
-- Python build system (`pyproject.toml`)
-- App server (FastAPI)
-- Unit tests (pytest)
-- Dockerfile for containerized runs
-- GitHub Actions CI on every push (install → test → docker build)
+## Features
+
+- **Sentiment Analysis API**: Analyzes text sentiment (positive/negative) using DistilBERT
+- **Lightweight Model**: ~67MB DistilBERT model optimized for CPU (perfect for laptops)
+- **Production Ready**: FastAPI, pytest, Docker, GitHub Actions CI
+- **Easy to Use**: Simple REST API with JSON input/output
 
 ---
 
 ## Architecture
 
-- **`app/main.py`**: A tiny FastAPI app exposing one GET endpoint (`/`) and one POST endpoint (`/api`).
-- **`tests/test_api.py`**: Smoke tests for both endpoints.
-- **`pyproject.toml`**: Build tool + dependencies.
-- **`Dockerfile`**: Production-like container (Python 3.11, uvicorn).
-- **`.github/workflows/ci.yml`**: CI on every push and pull request.
+- **`app/main.py`**: FastAPI app with sentiment analysis endpoint using `distilbert-base-uncased-finetuned-sst-2-english`
+- **`tests/test_api.py`**: Comprehensive tests for sentiment analysis
+- **`pyproject.toml`**: Build tool + dependencies (FastAPI, transformers, torch)
+- **`Dockerfile`**: Production-ready container (Python 3.11, uvicorn)
+- **`.github/workflows/ci.yml`**: CI pipeline on every push
 
 ---
 
 ## Quickstart (local)
 
 ```bash
+# Create virtual environment and install dependencies
 python -m venv .venv
 source .venv/bin/activate
 pip install -e .
+
+# Run tests
 pytest -q
+
+# Start the server
 uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+## API Usage
+
+### Check service status
+```bash
+curl http://localhost:8000/
+```
+
+### Analyze sentiment
+```bash
+curl -X POST http://localhost:8000/api/sentiment \
+  -H "Content-Type: application/json" \
+  -d '{"text": "I love this product! It works great!"}'
+```
+
+**Response:**
+```json
+{
+  "tag": "POSITIVE",
+  "scores": [0.9998, 0.0002]
+}
+```
+
+- `tag`: `POSITIVE` or `NEGATIVE`
+- `scores`: `[positive_score, negative_score]`
+
+---
+
+## Docker
+
+```bash
+docker build -t sentiment-service .
+docker run -p 8000:8000 sentiment-service
 ```
